@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+</head>
+
+<body>
+    <div class="container mt-5 text-center">
+        <ul class="list-group list-group-horizontal">
+            <li class="list-group-item">All</li>
+            <li class="list-group-item">Grass</li>
+            <li class="list-group-item">Water</li>
+            <li class="list-group-item">Fire</li>
+        </ul>
+        <div class="imgs row my-5">
+
+            <!-- <img class="col-md-3 col-sm-6 col-xs-12" src="https://pokemon.gishan.cc/static/i/p/wartortle.png"
+                poke-type="water" alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAoUCVL8I5ONMMzNQCGRs4LHYX2UIWuLtox0kgER7PfNJyyF80mESHnFgwyifzE04rAbI&usqp=CAU"
+                poke-type="grass" alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://archives.bulbagarden.net/media/upload/thumb/6/6d/0134Vaporeon.png/250px-0134Vaporeon.png"
+                poke-type="water" alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://poketouch.files.wordpress.com/2017/03/fire_mouse_pokemon_cyndaquil.png" poke-type="fire"
+                alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://qph.cf2.quoracdn.net/main-qimg-6e98525d65d5036701c6ba1abe89da25" poke-type="grass" alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://i0.wp.com/yumetwinsblog.wpcomstaging.com/wp-content/uploads/2021/12/4c9e1a01-76ac-4375-82ec-71aae24f79a4_900px-007Squirtle.png?resize=461%2C461&ssl=1"
+                poke-type="water" alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://i0.wp.com/pokejungle.net/wp-content/uploads/2022/02/Fuecoco_art-sm-1.png?resize=500%2C565&ssl=1"
+                poke-type="fire" alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://pm1.aminoapps.com/5852/bcdbc62e87f9fae8f5d4e3adef58a3ea09f97506_00.jpg" poke-type="fire"
+                alt="">
+            <img class="col-md-3 col-sm-6 col-xs-12"
+                src="https://publish.one37pm.net/wp-content/uploads/2022/11/1200px-470Leafeon.png?fit=680%2C680"
+                poke-type="grass" alt=""> -->
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCRXoyvD7ca6LxQTWmvlfJe_GiwK9ECGL8",
+            authDomain: "testsdu-7ac0b.firebaseapp.com",
+            projectId: "testsdu-7ac0b",
+            storageBucket: "testsdu-7ac0b.appspot.com",
+            messagingSenderId: "160618724003",
+            appId: "1:160618724003:web:d86f9e4e37e9c31ec2dd16"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+        const db = getDatabase();
+        function writeUserData() {
+            const id = genId();
+            set(ref(db, 'products/' + id), {
+                id: id,
+                name: 'name 1',
+                img: 'https://poketouch.files.wordpress.com/2017/03/fire_mouse_pokemon_cyndaquil.png',
+                type: 'grass'
+            }).then(() => {
+            });
+        }
+        // writeUserData();
+        get(ref(db, 'products/')).then(data => {
+            let datas = data.val();
+            for (const key in datas) {
+                const pokemon = datas[key];
+                $('.imgs').append(`<div poke-type="${pokemon.type}" class="col-md-3 col-sm-6 col-xs-12">
+                    <img class="w-100"
+                    src="${pokemon.img}">
+                    <p>${pokemon.name}</p>
+                    <button poke-id="${pokemon.id}" class="btn btn-primary addBasket">Add basket</button>
+                </div>`)
+            }
+        })
+        function genId() {
+            return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+    </script>
+    <script>
+        $('.list-group-item').click(function () {
+            $('.imgs div').hide();
+            if ($(this).text() == "All") {
+                $('.imgs div').fadeIn();
+            }
+            else {
+                $(`.imgs div[poke-type="${$(this).text().toLowerCase()}"]`).fadeIn();
+            }
+        })
+        $('.imgs').on("click", ".addBasket", function () {
+            let result = getCookie('basket');
+            let basketItems = [];
+            const currentId = $(this).attr('poke-id')
+            if (result != "") {
+                basketItems = JSON.parse(result)
+            }
+            const existIndex = basketItems.findIndex(p=>p.id == currentId);
+            console.log(basketItems.findIndex(p=>p.id == currentId));
+            if (existIndex != -1) {
+                basketItems[existIndex].count++;
+            }
+            else{
+                basketItems.push({id:currentId, count:1})
+            }
+            Command: toastr["success"]("Səbətə əlavə olundu")
+            toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+            }
+            document.cookie = "basket="+JSON.stringify(basketItems);
+        })
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+</body>
+
+</html>

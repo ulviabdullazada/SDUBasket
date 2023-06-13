@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container p-5">
+        <ul class="list-group list-group-vertical">
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCRXoyvD7ca6LxQTWmvlfJe_GiwK9ECGL8",
+            authDomain: "testsdu-7ac0b.firebaseapp.com",
+            projectId: "testsdu-7ac0b",
+            storageBucket: "testsdu-7ac0b.appspot.com",
+            messagingSenderId: "160618724003",
+            appId: "1:160618724003:web:d86f9e4e37e9c31ec2dd16"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+        const db = getDatabase();
+        function getBasket(){
+            const result = getCookie('basket')
+            if (result != "") {
+                let basket = JSON.parse(result);
+                basket.forEach(item => {
+                    get(ref(db, 'products/'+item.id)).then(data=>{
+                        $('.list-group-vertical').append(`<li class="list-group-item">
+                            <img width="25" src='${data.val().img}'/> <span>${data.val().name}</span> - <span>Count : ${item.count}</span>
+                        </li>`)
+                    })
+                });
+            }
+            else{
+                $('.list-group-vertical').append(`<li class="list-group-item">Səbət boşdur</li>`)
+            }
+        }
+        getBasket();
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+</body>
+</html>
